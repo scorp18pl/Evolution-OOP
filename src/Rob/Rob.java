@@ -31,6 +31,15 @@ public class Rob {
         this.kierunek = kierunek;
     }
 
+    private boolean możeJeść(Plansza plansza) {
+        return plansza.dajPole(this.pole).posiadaPożywienie();
+    }
+
+    private void zjedzPożywienie(Plansza plansza) {
+        plansza.dajPole(this.pole).usuńPożywienie();
+        this.energia += Symulacja.parametry.ile_daje_jedzenie;
+    }
+
     private void obróć(boolean w_lewo) {
         if (this.kierunek == Plansza.Kierunek.N)
             this.kierunek = (w_lewo ? Plansza.Kierunek.W : Plansza.Kierunek.E);
@@ -56,25 +65,37 @@ public class Rob {
     private void idź(Plansza plansza) {
         this.pole = plansza.dajPoleSąsiadująceW(this.pole, this.kierunek);
 
-        if (plansza.dajPole(this.pole).posiadaPożywienie()) {
-            plansza.dajPole(this.pole).usuńPożywienie();
-            this.energia += Symulacja.parametry.ile_daje_jedzenie;
-        }
+        if (możeJeść(plansza))
+            zjedzPożywienie(plansza);
     }
 
     private void wąchaj(Plansza plansza) {
         Plansza.Kierunek[] kierunki = {Plansza.Kierunek.N, Plansza.Kierunek.E, 
-                              Plansza.Kierunek.S, Plansza.Kierunek.W};
+                                        Plansza.Kierunek.S, Plansza.Kierunek.W};
 
-        for (Plansza.Kierunek kierunek : kierunki)
-            if (plansza.dajPole(plansza.dajPoleSąsiadująceW(this.pole, kierunek)).posiadaPożywienie()) {
+        for (Plansza.Kierunek kierunek : kierunki) {
+            Wektor2i pole_sąsiadujące = plansza.dajPoleSąsiadująceW(this.pole, kierunek);
+            
+            if (plansza.dajPole(pole_sąsiadujące).posiadaPożywienie()) {
                 this.kierunek = kierunek;
                 break;
-            }
+            }   
+        }
     }
 
     private void jedz(Plansza plansza) {
-
+        Plansza.Kierunek[] kierunki = {Plansza.Kierunek.N, Plansza.Kierunek.NE, Plansza.Kierunek.E, 
+                                        Plansza.Kierunek.SE, Plansza.Kierunek.S, Plansza.Kierunek.SW, 
+                                        Plansza.Kierunek.W, Plansza.Kierunek.NW};
+        
+        for (Plansza.Kierunek kierunek : kierunki) {
+            Wektor2i pole_sąsiadujące = plansza.dajPoleSąsiadująceW(this.pole, kierunek);
+            
+            if (plansza.dajPole(pole_sąsiadujące).posiadaPożywienie()) {
+                this.pole = pole_sąsiadujące;
+                zjedzPożywienie(plansza);
+            }
+        }
     }
 
     public void wykonajProgram(Plansza plansza) {
@@ -96,7 +117,6 @@ public class Rob {
                     jedz(plansza);
                     break;
             }
-
 
             this.energia--;
 

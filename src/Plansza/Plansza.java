@@ -91,15 +91,32 @@ public class Plansza {
         roby.add(rob);
     }
 
-    public void aktualizujRoby() {
+    private void dodajPotomstwo() {
         roby.addAll(potomstwo);
         potomstwo.clear();
+    }
 
+    private void wykonajProgramyRobów() {
         for (Rob rob : roby) {
             rob.wykonajProgram(this);
+
             if (rob.czyPowielać())
                 potomstwo.add(rob.powiel());
         }
+    }
+
+    private void usuńMartweRoby() {
+        for (Rob rob : roby) {
+            if (!rob.żyje())
+                if(!roby.remove(rob))
+                    System.out.println("Nieudana próba usunięcia roba.\n");
+        }
+    }
+
+    public void aktualizujRoby() {
+        dodajPotomstwo();
+        wykonajProgramyRobów();
+        usuńMartweRoby();
     }
 
     public void aktualizujPola() {
