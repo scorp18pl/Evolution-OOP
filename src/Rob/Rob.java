@@ -45,8 +45,17 @@ public class Rob {
             this.kierunek = (w_lewo ? Plansza.Kierunek.S : Plansza.Kierunek.N);
     }
 
+    private void obróćWLewo() {
+        obróć(true);
+    }
+
+    private void obróćWPrawo() {
+        obróć(false);
+    }
+
     private void idź(Plansza plansza) {
         this.pole = plansza.dajPoleSąsiadująceW(this.pole, this.kierunek);
+
         if (plansza.dajPole(this.pole).posiadaPożywienie()) {
             plansza.dajPole(this.pole).usuńPożywienie();
             this.energia += Symulacja.parametry.ile_daje_jedzenie;
@@ -56,12 +65,12 @@ public class Rob {
     private void wąchaj(Plansza plansza) {
         Plansza.Kierunek[] kierunki = {Plansza.Kierunek.N, Plansza.Kierunek.E, 
                               Plansza.Kierunek.S, Plansza.Kierunek.W};
-        for (Plansza.Kierunek kierunek : kierunki) {
+
+        for (Plansza.Kierunek kierunek : kierunki)
             if (plansza.dajPole(plansza.dajPoleSąsiadująceW(this.pole, kierunek)).posiadaPożywienie()) {
                 this.kierunek = kierunek;
                 break;
             }
-        }
     }
 
     private void jedz(Plansza plansza) {
@@ -72,10 +81,10 @@ public class Rob {
         for (Program.Instrukcja inst : this.program.dajInstrukcje()) {
             switch (inst) {
                 case LEWO:
-                    obróć(true);
+                    obróćWLewo();
                     break;
                 case PRAWO:
-                    obróć(false);
+                    obróćWPrawo();
                     break;
                 case IDŹ:
                     idź(plansza);
@@ -97,14 +106,21 @@ public class Rob {
     }
 
     public boolean czyPowielać() {
-        Random r = new Random();
-        return r.nextFloat() <= Symulacja.parametry.pr_powielenia;
+        if (this.energia < Symulacja.parametry.limit_powielania)
+            return false;
+        Random random = new Random();
+        return random.nextFloat() <= Symulacja.parametry.pr_powielenia;
     }
 
     public Rob powiel() {
+        Program program = this.program.mutuj();
+        int energia = this.energia * Symulacja.parametry.ułamek_energii_rodzica;
+        
+        this.energia -= energia;
 
-        Rob r = new Rob();
-        r.ustawKierunek(Plansza.dajPrzeciwnyKierunek());
+        Rob r = new Rob(program, energia);
+        r.ustawKierunek(Plansza.dajPrzeciwnyKierunek(this.kierunek));
+
         return r;
     }
 

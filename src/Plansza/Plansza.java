@@ -18,6 +18,21 @@ public class Plansza {
     private ArrayList<Rob> roby;
     private ArrayList<Rob> potomstwo;
 
+    static public Kierunek dajPrzeciwnyKierunek(Kierunek k) {
+        //Działa tylko dla kierunków głównych (N, E, S, W)
+        
+        switch (k) {
+            case N:
+                return Kierunek.S;
+            case E:
+                return Kierunek.W;
+            case S:
+                return Kierunek.N;
+            default:
+                return Kierunek.E;
+        }
+    }
+
     private int indeksPola(Wektor2i w_pola) {
         return w_pola.y * this.rozmiar_planszy_x + w_pola.x;
     }
