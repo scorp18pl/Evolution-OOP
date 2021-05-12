@@ -2,151 +2,153 @@ package Rob;
 
 import java.util.Random;
 
-import Pomocnicze.Wektor2i;
+import Board.Board;
+import Helper.Vector2i;
 import Program.Program;
-import Symulacja.Symulacja;
-import Plansza.Plansza;
 
 public class Rob {
-    private Wektor2i pole;
+    private Vector2i position;
 
-    private int energia;
+    private int energy;
     private Program program;
 
-    private Plansza.Kierunek kierunek;
+    private Board.Direction direction;
 
-    public Wektor2i dajPole() {
-        return this.pole;
+    public Vector2i getPosition() {
+        return this.position;
     }
 
-    public boolean żyje() {
-        return this.energia >= 0;
+    public boolean alive() {
+        return this.energy >= 0;
     }
 
-    public void ustawPole(Wektor2i pole) {
-        this.pole = pole;
+    public void setPosition(Vector2i position) {
+        this.position = position;
     }
 
-    public void ustawKierunek(Plansza.Kierunek kierunek) {
-        this.kierunek = kierunek;
+    public void setDirection(Board.Direction direction) {
+        this.direction = direction;
     }
 
-    private boolean możeJeść(Plansza plansza) {
-        return plansza.dajPole(this.pole).posiadaPożywienie();
+    private boolean canEat(Board board) {
+        return board.getField(this.position).hasFood();
     }
 
-    private void zjedzPożywienie(Plansza plansza) {
-        plansza.dajPole(this.pole).usuńPożywienie();
-        this.energia += Symulacja.parametry.ile_daje_jedzenie;
+    private void eatFood(Board board) {
+        board.getField(this.position).removeFood();
+        // this.energy += Symulacja.parametry.ile_daje_jedzenie;
     }
 
-    private void obróć(boolean w_lewo) {
-        if (this.kierunek == Plansza.Kierunek.N)
-            this.kierunek = (w_lewo ? Plansza.Kierunek.W : Plansza.Kierunek.E);
+    private void turn(boolean left) {
+        if (this.direction == Board.Direction.N)
+            this.direction = (left ? Board.Direction.W : Board.Direction.E);
         
-        if (this.kierunek == Plansza.Kierunek.E)
-            this.kierunek = (w_lewo ? Plansza.Kierunek.N : Plansza.Kierunek.S);
+        if (this.direction == Board.Direction.E)
+            this.direction = (left ? Board.Direction.N : Board.Direction.S);
 
-        if (this.kierunek == Plansza.Kierunek.S)
-            this.kierunek = (w_lewo ? Plansza.Kierunek.E : Plansza.Kierunek.W);
+        if (this.direction == Board.Direction.S)
+            this.direction = (left ? Board.Direction.E : Board.Direction.W);
 
-        if (this.kierunek == Plansza.Kierunek.W)
-            this.kierunek = (w_lewo ? Plansza.Kierunek.S : Plansza.Kierunek.N);
+        if (this.direction == Board.Direction.W)
+            this.direction = (left ? Board.Direction.S : Board.Direction.N);
     }
 
-    private void obróćWLewo() {
-        obróć(true);
+    private void turnLeft() {
+        turn(true);
     }
 
-    private void obróćWPrawo() {
-        obróć(false);
+    private void turnRight() {
+        turn(false);
     }
 
-    private void idź(Plansza plansza) {
-        this.pole = plansza.dajPoleSąsiadująceW(this.pole, this.kierunek);
+    private void move(Board board) {
+        this.position = board.getNeighbourPosition(this.position, this.direction);
 
-        if (możeJeść(plansza))
-            zjedzPożywienie(plansza);
+        if (canEat(board))
+            eatFood(board);
     }
 
-    private void wąchaj(Plansza plansza) {
-        Plansza.Kierunek[] kierunki = {Plansza.Kierunek.N, Plansza.Kierunek.E, 
-                                        Plansza.Kierunek.S, Plansza.Kierunek.W};
+    private void smell(Board board) {
+        Board.Direction[] directions = {Board.Direction.N, Board.Direction.E, 
+                                        Board.Direction.S, Board.Direction.W};
 
-        for (Plansza.Kierunek kierunek : kierunki) {
-            Wektor2i pole_sąsiadujące = plansza.dajPoleSąsiadująceW(this.pole, kierunek);
+        for (Board.Direction direction : directions) {
+            Vector2i neighbour_field = board.getNeighbourPosition(this.position, direction);
             
-            if (plansza.dajPole(pole_sąsiadujące).posiadaPożywienie()) {
-                this.kierunek = kierunek;
+            if (board.getField(neighbour_field).hasFood()) {
+                this.direction = direction;
                 break;
             }   
         }
     }
 
-    private void jedz(Plansza plansza) {
-        Plansza.Kierunek[] kierunki = {Plansza.Kierunek.N, Plansza.Kierunek.NE, Plansza.Kierunek.E, 
-                                        Plansza.Kierunek.SE, Plansza.Kierunek.S, Plansza.Kierunek.SW, 
-                                        Plansza.Kierunek.W, Plansza.Kierunek.NW};
+    private void eat(Board board) {
+        Board.Direction[] directions = {Board.Direction.N, Board.Direction.NE, Board.Direction.E, 
+                                        Board.Direction.SE, Board.Direction.S, Board.Direction.SW, 
+                                        Board.Direction.W, Board.Direction.NW};
         
-        for (Plansza.Kierunek kierunek : kierunki) {
-            Wektor2i pole_sąsiadujące = plansza.dajPoleSąsiadująceW(this.pole, kierunek);
+        for (Board.Direction direction : directions) {
+            Vector2i neighbour_field = board.getNeighbourPosition(this.position, direction);
             
-            if (plansza.dajPole(pole_sąsiadujące).posiadaPożywienie()) {
-                this.pole = pole_sąsiadujące;
-                zjedzPożywienie(plansza);
+            if (board.getField(neighbour_field).hasFood()) {
+                this.position = neighbour_field;
+                eatFood(board);
             }
         }
     }
 
-    public void wykonajProgram(Plansza plansza) {
-        for (Program.Instrukcja inst : this.program.dajInstrukcje()) {
+    public void executeProgram(Board board) {
+        for (Program.Instruction inst : this.program.getInstruction()) {
             switch (inst) {
-                case LEWO:
-                    obróćWLewo();
+                case LEFT:
+                    turnLeft();
                     break;
-                case PRAWO:
-                    obróćWPrawo();
+                case RIGHT:
+                    turnRight();
                     break;
-                case IDŹ:
-                    idź(plansza);
+                case MOVE:
+                    move(board);
                     break;
-                case WĄCHAJ:
-                    wąchaj(plansza);
+                case SMELL:
+                    smell(board);
                     break;
-                case JEDZ:
-                    jedz(plansza);
+                case EAT:
+                    eat(board);
                     break;
             }
 
-            this.energia--;
+            this.energy--;
 
-            if(this.energia < 0)
+            if(this.energy < 0)
                 break;
         }
     }
 
-    public boolean czyPowielać() {
-        if (this.energia < Symulacja.parametry.limit_powielania)
-            return false;
-        Random random = new Random();
-        return random.nextFloat() <= Symulacja.parametry.pr_powielenia;
+    public boolean shouldDuplicate() {
+        // if (this.energy < Symulacja.parametry.limit_powielania)
+        //     return false;
+        // Random random = new Random();
+        // return random.nextFloat() <= Symulacja.parametry.pr_powielenia;
+
+        return false;
     }
 
-    public Rob powiel() {
-        Program program = this.program.mutuj();
-        int energia = this.energia * Symulacja.parametry.ułamek_energii_rodzica;
-        
-        this.energia -= energia;
+    public Rob duplicate() {
+        Program program = this.program.mutate();
+        // int energy = this.energy * Symulacja.parametry.ułamek_energii_rodzica;
+        int energy = 0;
 
-        Rob r = new Rob(program, energia);
-        r.ustawKierunek(Plansza.dajPrzeciwnyKierunek(this.kierunek));
+        this.energy -= energy;
+
+        Rob r = new Rob(program, energy);
+        r.setDirection(Board.getOppositeDirection(this.direction));
 
         return r;
     }
 
-    public Rob(Program program, int energia) {
+    public Rob(Program program, int energy) {
         this.program = program;
-        this.energia = energia;
-        this.kierunek = Plansza.Kierunek.N;
+        this.energy = energy;
+        this.direction = Board.Direction.N;
     }
 }

@@ -4,81 +4,87 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import Symulacja.Symulacja;
+// import Symulacja;
 
 public class Program {
-    public enum Instrukcja {
-        LEWO, PRAWO, IDŹ, WĄCHAJ, JEDZ;
+    public static enum Instruction {
+        LEFT, RIGHT, MOVE, SMELL, EAT;
     }
 
-    private ArrayList<Instrukcja> instrukcje;
+    private ArrayList<Instruction> instructions;
 
-    private static boolean losujPr(float pr) {
+    // private static boolean drawProb(float pr) {
+    //     Random r = new Random();
+    //     return r.nextFloat() <= pr;
+    // }
+
+    private static boolean drawInstrDeletion() {
+        // return drawProb(Symulacja.parametry.pr_usunięcia_instr);
+        return true;
+    }
+
+    private static boolean drawInstrChange() {
+        // return drawProb(Symulacja.parametry.pr_zmiany_instr);
+        return true;
+
+    }
+
+    private static boolean drawInstrAddition() {
+        // return drawProb(Symulacja.parametry.pr_dodania_instr);
+        return true;
+
+    }
+
+    private static Instruction getRandomInstruction() {
+        // Random r = new Random();
+        // return Symulacja.parametry.spis_instr[r.nextInt(Symulacja.parametry.spis_instr.length)];
+        return Instruction.LEFT;
+    }
+
+    private void deleteInstruction() {
+        this.instructions.remove(this.instructions.size() - 1);
+    }
+
+    private void changeInstruction() {
         Random r = new Random();
-        return r.nextFloat() <= pr;
-    }
-
-    private static boolean losujUsunięcieInst() {
-        return losujPr(Symulacja.parametry.pr_usunięcia_instr);
-    }
-
-    private static boolean losujZmianęInst() {
-        return losujPr(Symulacja.parametry.pr_zmiany_instr);
-    }
-
-    private static boolean losujDodanieInstrukcji() {
-        return losujPr(Symulacja.parametry.pr_dodania_instr);
-    }
-
-    private static Instrukcja losujInstrukcję() {
-        Random r = new Random();
-        return Symulacja.parametry.spis_instr[r.nextInt(Symulacja.parametry.spis_instr.length)];
-    }
-
-    private void usuńInstrukcję() {
-        this.instrukcje.remove(this.instrukcje.size() - 1);
-    }
-
-    private void zmieńInstrukcję() {
-        Random r = new Random();
-        Instrukcja i = Program.losujInstrukcję();
+        Instruction i = Program.getRandomInstruction();
     
-        this.instrukcje.set(r.nextInt(this.instrukcje.size()), i);
+        this.instructions.set(r.nextInt(this.instructions.size()), i);
     }
 
-    private void dodajInstrukcję() {
-        Instrukcja i = Program.losujInstrukcję();
+    private void addInstruction() {
+        Instruction i = Program.getRandomInstruction();
 
-        this.instrukcje.add(i);
+        this.instructions.add(i);
     }
 
-    public Program mutuj() {
-        ArrayList<Instrukcja> i = new ArrayList<Instrukcja>();
-        Collections.copy(i, this.instrukcje);
+    public Program mutate() {
+        ArrayList<Instruction> i = new ArrayList<Instruction>();
+        Collections.copy(i, this.instructions);
         
         Program p = new Program(i);
 
-        if (this.instrukcje.size() > 0 && Program.losujUsunięcieInst())
-            p.usuńInstrukcję();
+        if (this.instructions.size() > 0 && Program.drawInstrDeletion())
+            p.deleteInstruction();
 
-        if (this.instrukcje.size() > 0 && Program.losujDodanieInstrukcji())
-            p.dodajInstrukcję();
+        if (this.instructions.size() > 0 && Program.drawInstrAddition())
+            p.addInstruction();
 
-        if (Program.losujZmianęInst())
-            p.zmieńInstrukcję();
+        if (Program.drawInstrChange())
+            p.changeInstruction();
             
         return p;
     }
 
-    public ArrayList<Instrukcja> dajInstrukcje() {
-        return this.instrukcje;
+    public ArrayList<Instruction> getInstruction() {
+        return this.instructions;
     } 
 
     public Program() {
-        this.instrukcje = new ArrayList<Instrukcja>();
+        this.instructions = new ArrayList<Instruction>();
     }
 
-    public Program(ArrayList<Instrukcja> inst) {
-        this.instrukcje = inst;
+    public Program(ArrayList<Instruction> inst) {
+        this.instructions = inst;
     }
 }
