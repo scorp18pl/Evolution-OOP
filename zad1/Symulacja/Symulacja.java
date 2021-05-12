@@ -25,6 +25,7 @@ public class Symulacja {
         for (int i = 0; i < Symulacja.parametry.pocz_ile_robów; i++) {
             Rob r = new Rob(Symulacja.parametry.pocz_progr, Symulacja.parametry.pocz_energia);
             r.ustawPole(plansza.dajLosowePoleW());
+            
             plansza.dodajRoba(r);
         }
     }

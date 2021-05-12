@@ -31,10 +31,8 @@ public class Program {
     }
 
     private static Instrukcja losujInstrukcję() {
-        Instrukcja[] instr = {Instrukcja.LEWO, Instrukcja.PRAWO, 
-                            Instrukcja.IDŹ, Instrukcja.WĄCHAJ, Instrukcja.JEDZ};
         Random r = new Random();
-        return instr[r.nextInt(instr.length)];
+        return Symulacja.parametry.spis_instr[r.nextInt(Symulacja.parametry.spis_instr.length)];
     }
 
     private void usuńInstrukcję() {
@@ -60,17 +58,15 @@ public class Program {
         
         Program p = new Program(i);
 
-        if (this.instrukcje.size() > 0) {
-            if (Program.losujUsunięcieInst())
-                p.usuńInstrukcję();
+        if (this.instrukcje.size() > 0 && Program.losujUsunięcieInst())
+            p.usuńInstrukcję();
 
-            if (Program.losujZmianęInst())
-                p.zmieńInstrukcję();
-        }
-
-        if (losujDodanieInstrukcji())
+        if (this.instrukcje.size() > 0 && Program.losujDodanieInstrukcji())
             p.dodajInstrukcję();
 
+        if (Program.losujZmianęInst())
+            p.zmieńInstrukcję();
+            
         return p;
     }
 

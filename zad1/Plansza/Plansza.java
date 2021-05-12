@@ -107,9 +107,8 @@ public class Plansza {
 
     private void usuńMartweRoby() {
         for (Rob rob : roby) {
-            if (!rob.żyje())
-                if(!roby.remove(rob))
-                    System.out.println("Nieudana próba usunięcia roba.\n");
+            if (!rob.żyje() && !roby.remove(rob))
+                System.out.println("Nieudana próba usunięcia roba.\n");
         }
     }
 

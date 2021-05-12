@@ -23,7 +23,7 @@ public class Parametry {
     public int pr_usunięcia_instr;
     public int pr_dodania_instr;
     public int pr_zmiany_instr;
-    public Program spis_instr;
+    public Program.Instrukcja[] spis_instr;
     public Program pocz_progr;
 
     public Parametry() {
