@@ -1,11 +1,12 @@
-package Rob;
+package zad1.Rob;
 
 
-// import java.util.Random;
+import java.util.Random;
 
-import Board.Board;
-import Helper.Vector2i;
-import Program.Program;
+import zad1.Board.Board;
+import zad1.Evolution.Evolution;
+import zad1.Helper.Vector2i;
+import zad1.Program.Program;
 
 public class Rob {
     private Vector2i position;
@@ -37,7 +38,7 @@ public class Rob {
 
     private void eatFood(Board board) {
         board.getField(this.position).removeFood();
-        // this.energy += Symulacja.parametry.ile_daje_jedzenie;
+        this.energy += Evolution.getParameters().food_energy;
     }
 
     private void turn(boolean left) {
@@ -126,19 +127,17 @@ public class Rob {
     }
 
     public boolean shouldDuplicate() {
-        // if (this.energy < Symulacja.parametry.limit_powielania)
-        //     return false;
-        // Random random = new Random();
-        // return random.nextFloat() <= Symulacja.parametry.pr_powielenia;
+        if (this.energy < Evolution.getParameters().duplicating_limit)
+            return false;
 
-        return false;
+        Random random = new Random();
+
+        return random.nextFloat() <= Evolution.getParameters().duplicating_prob;
     }
 
     public Rob duplicate() {
         Program program = this.program.mutate();
-        // int energy = this.energy * Symulacja.parametry.ułamek_energii_rodzica;
-        int energy = 0;
-
+        int energy = (int)((float)this.energy * Evolution.getParameters().parent_energy_fraction);
         this.energy -= energy;
 
         Rob r = new Rob(program, energy);

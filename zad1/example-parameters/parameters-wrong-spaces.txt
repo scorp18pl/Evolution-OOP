@@ -1,0 +1,15 @@
+ile_tur 0
+pocz_ile_robów    0
+pocz_progr lpiwj
+pocz_energia 0
+ile_daje_jedzenie 0
+ile_rośnie_jedzenie  0
+koszt_tury 0
+pr_powielenia 0.0
+ułamek_energii_rodzica 0.0
+limit_powielenia    0
+pr_usunięcia_instr 0.0
+pr_dodania_instr 0.0
+pr_zmiany_instr   0.0
+spis_instr lpiwj
+co_ile_wypisz    0

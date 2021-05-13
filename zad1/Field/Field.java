@@ -1,4 +1,4 @@
-package Field;
+package zad1.Field;
 
 public class Field {
     public void update() {

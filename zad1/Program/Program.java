@@ -1,9 +1,11 @@
-package Program;
+package zad1.Program;
 
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+
+import zad1.Evolution.Evolution;
 
 // import Symulacja;
 
@@ -12,33 +14,61 @@ public class Program {
         LEFT, RIGHT, MOVE, SMELL, EAT;
     }
 
+    private static void exitInvalidChar() {
+        System.out.println("Invalid Character.");
+        System.exit(1);
+    }
+
+    private static boolean isAllowed(char c) {
+        char[] allowed = {'l', 'p', 'i', 'w', 'j'};
+
+        for (char allowed_char : allowed)
+            if (c == allowed_char)
+                return true;
+        
+        return false;
+    }
+
+    private static Instruction toInstruction(char c) {
+        if (!isAllowed(c))
+            exitInvalidChar();
+
+        switch (c) {
+            case 'l' :
+                return Instruction.LEFT;
+            case 'p' :
+                return Instruction.RIGHT;
+            case 'i' :
+                return Instruction.MOVE;
+            case 'w' :
+                return Instruction.SMELL;
+            default :
+                return Instruction.EAT;
+        }
+    }
+
     private ArrayList<Instruction> instructions;
 
-    // private static boolean drawProb(float pr) {
-    //     Random r = new Random();
-    //     return r.nextFloat() <= pr;
-    // }
+    private static boolean drawProb(float pr) {
+        Random r = new Random();
+        return r.nextFloat() <= pr;
+    }
 
     private static boolean drawInstrDeletion() {
-        // return drawProb(Symulacja.parametry.pr_usunięcia_instr);
-        return true;
+        return drawProb(Evolution.getParameters().instr_del_prob);
     }
 
     private static boolean drawInstrChange() {
-        // return drawProb(Symulacja.parametry.pr_zmiany_instr);
-        return true;
-
+        return drawProb(Evolution.getParameters().instr_chg_prob);
     }
 
     private static boolean drawInstrAddition() {
-        // return drawProb(Symulacja.parametry.pr_dodania_instr);
-        return true;
-
+        return drawProb(Evolution.getParameters().instr_add_prob);
     }
 
     private static Instruction getRandomInstruction() {
-        // Random r = new Random();
-        // return Symulacja.parametry.spis_instr[r.nextInt(Symulacja.parametry.spis_instr.length)];
+        Random r = new Random();
+        // return Evolution.getParameters().instr_log[r.nextInt(Evolution.getParameters().instr_log.length)];
         return Instruction.LEFT;
     }
 
@@ -87,5 +117,15 @@ public class Program {
 
     public Program(ArrayList<Instruction> inst) {
         this.instructions = inst;
+    }
+
+    public Program(String string) {
+        this.instructions = new ArrayList<Instruction>();
+
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+
+            this.instructions.add(Program.toInstruction(c));
+        }
     }
 }

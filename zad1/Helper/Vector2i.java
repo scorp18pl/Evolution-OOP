@@ -1,4 +1,4 @@
-package Helper;
+package zad1.Helper;
 
 
 public class Vector2i {

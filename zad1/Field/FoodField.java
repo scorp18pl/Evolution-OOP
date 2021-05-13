@@ -1,6 +1,6 @@
-package Field;
+package zad1.Field;
 
-// import Symulacja;
+import zad1.Evolution.Evolution;
 
 public class FoodField extends Field {
     private boolean food;
@@ -22,7 +22,7 @@ public class FoodField extends Field {
     @Override
     public void removeFood() {
         this.food = false;
-        // this.licznik = Symulacja.parametry.ile_rośnie_jedzenie;
+        this.counter = Evolution.getParameters().food_grow_time;
     }
 
     public FoodField() {
