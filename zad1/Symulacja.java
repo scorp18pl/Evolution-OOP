@@ -31,7 +31,7 @@ public class Symulacja {
     }
 
     public static void main(String[] args) {
-        Symulacja s = new Symulacja();
+        // Symulacja s = new Symulacja();
         // s.start();
     }
 }

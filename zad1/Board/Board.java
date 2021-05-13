@@ -1,11 +1,11 @@
 package Board;
 
+import Helper.Vector2i;
+import Field.Field;
+import Rob.Rob;
+
 import java.util.ArrayList;
 import java.util.Random;
-
-import Field.Field;
-import Helper.Vector2i;
-import Rob.Rob;
 
 public class Board {
     static public enum Direction {

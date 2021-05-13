@@ -1,11 +1,12 @@
 package Input;
 
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import Board.Board;
-import Field.Field;
 import Field.EmptyField;
+import Field.Field;
 import Field.FoodField;
 import Parameters.Parameters;
 
@@ -67,7 +68,7 @@ public class Input {
         Parameters p = new Parameters();
 
         while (scanner.hasNext()) {
-            String line = scanner.nextLine();
+            // String line = scanner.nextLine();
             // line.
             
         }
