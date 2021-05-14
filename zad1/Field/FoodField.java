@@ -25,6 +25,11 @@ public class FoodField extends Field {
         this.counter = Evolution.getParameters().food_grow_time;
     }
 
+    @Override
+    public boolean isRegenerating() {
+        return !food;
+    }
+
     public FoodField() {
         super();
         this.counter = 0;

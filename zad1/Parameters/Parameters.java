@@ -88,6 +88,9 @@ public class Parameters {
         initialized = initialized && this.instr_add_prob != -1.0f;
         initialized = initialized && this.instr_chg_prob != -1.0f;
 
+        initialized = initialized && this.instr_log.initialized();
+        initialized = initialized && this.init_prog.initialized();
+
         return initialized;
     }
 
@@ -182,5 +185,8 @@ public class Parameters {
         this.instr_del_prob = p.instr_del_prob;
         this.instr_add_prob = p.instr_add_prob;
         this.instr_chg_prob = p.instr_chg_prob;
+
+        this.instr_log = new Program(p.instr_log);
+        this.init_prog = new Program(p.init_prog);
     }
 }

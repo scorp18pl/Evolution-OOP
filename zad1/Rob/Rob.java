@@ -11,6 +11,7 @@ import zad1.Program.Program;
 public class Rob {
     private Vector2i position;
 
+    private int age;
     private int energy;
     private Program program;
 
@@ -32,6 +33,10 @@ public class Rob {
         this.direction = direction;
     }
 
+    public void incrementAge() {
+        this.age++;
+    }
+
     private boolean canEat(Board board) {
         return board.getField(this.position).hasFood();
     }
@@ -39,6 +44,39 @@ public class Rob {
     private void eatFood(Board board) {
         board.getField(this.position).removeFood();
         this.energy += Evolution.getParameters().food_energy;
+    }
+
+    public int getAge() {
+        return this.age;
+    }
+
+    public int getEnergy() {
+        return this.energy;
+    }
+
+    public int getProgramLength() {
+        return this.program.getLength();
+    }
+
+    private String dirToString() {
+        switch (this.direction) {
+            case N:
+                return "Północ";
+            case E:
+                return "Wschód";
+            case S:
+                return "Południe";
+            default:
+                return "Zachód";
+        }
+    }
+
+    public void print() {
+        System.out.println("Rob:");
+
+        System.out.println("położenie: " + this.position.toString() + ", kierunek: " + this.dirToString() + 
+                            ", wiek: " + this.age + ", energia: " + this.energy);
+        this.program.print();
     }
 
     private void turn(boolean left) {
@@ -142,6 +180,7 @@ public class Rob {
 
         Rob r = new Rob(program, energy);
         r.setDirection(Board.getOppositeDirection(this.direction));
+        r.setPosition(this.position);
 
         return r;
     }
@@ -150,5 +189,6 @@ public class Rob {
         this.program = program;
         this.energy = energy;
         this.direction = Board.Direction.N;
+        this.age = 0;
     }
 }

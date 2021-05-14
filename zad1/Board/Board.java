@@ -15,6 +15,8 @@ public class Board {
     private int board_size_x, board_size_y;
     private Field[] fields;
 
+    private Stats stats;
+
     private ArrayList<Rob> robs;
     private ArrayList<Rob> offspring;
 
@@ -52,24 +54,32 @@ public class Board {
         switch (k) {
             case N:
                 neighbour_p.y--;
+                break;
             case NE:
                 neighbour_p.x++;
                 neighbour_p.y--;
+                break;
             case E:
                 neighbour_p.x++;
+                break;
             case SE:
                 neighbour_p.x++;
                 neighbour_p.y++;
+                break;
             case S:
                 neighbour_p.y++;
+                break;
             case SW:
                 neighbour_p.x--;
                 neighbour_p.y++;
+                break;
             case W:
                 neighbour_p.x--;
+                break;
             case NW:
                 neighbour_p.x--;
                 neighbour_p.y--;
+                break;
         }
 
         if (neighbour_p.x == -1)
@@ -91,18 +101,37 @@ public class Board {
         this.fields = fields;
     }
 
+    public int getRobCount() {
+        return this.robs.size();
+    }
+
+    public int getFoodFieldCount() {
+        int count = 0;
+
+        for (Field field : this.fields)
+            if (field.hasFood())
+                count++;
+
+        return count;
+    }
+
+    public ArrayList<Rob> getRobs() {
+        return this.robs;
+    }
+
     public void addRob(Rob rob) {
-        robs.add(rob);
+        this.robs.add(rob);
     }
 
     private void addOffspring() {
-        robs.addAll(offspring);
+        this.robs.addAll(offspring);
         offspring.clear();
     }
 
     private void executeRobPrograms() {
-        for (Rob rob : robs) {
+        for (Rob rob : this.robs) {
             rob.executeProgram(this);
+            rob.incrementAge();
 
             if (rob.shouldDuplicate())
                 offspring.add(rob.duplicate());
@@ -110,10 +139,46 @@ public class Board {
     }
 
     private void removeDeadRobs() {
-        for (Rob rob : robs) {
-            if (!rob.alive() && !robs.remove(rob))
-                System.out.println("Failed attempt to delete a rob.\n");
+        for (int i = 0; i < this.robs.size(); i++) {
+            if (!this.robs.get(i).alive()) {
+                this.robs.remove(i);
+                i--;
+            }
         }
+    }
+
+    private void printRobs() {
+        System.out.println("");
+        System.out.println("Roby: ");
+        for(Rob rob : this.robs)
+            rob.print();
+    }
+
+    private void printBoard() {
+        
+        for (int i = -1; i < this.board_size_x + 1; i++)
+            System.out.print("#");
+        System.out.print("\n");
+
+        for (int i = 0; i < this.fields.length; i++) {
+            if (i % this.board_size_x == 0)
+                System.out.print("#");
+
+            if (this.fields[i].hasFood())
+                System.out.print("*");
+            else if (this.fields[i].isRegenerating())
+                System.out.print("`");
+            else
+                System.out.print(" ");
+            
+            if ((i + 1) % this.board_size_x == 0)
+                System.out.print("#\n");
+        }
+
+        for (int i = -1; i < this.board_size_x + 1; i++)
+            System.out.print("#");
+        System.out.print("\n");
+        
     }
 
     public void updateRobs() {
@@ -126,12 +191,25 @@ public class Board {
         for (Field f : fields)
             f.update();
     }
+
+    public void printState() {
+        printBoard();
+        printRobs();
+    }
+
+    public void printStats() {
+        this.stats.update(this);
+        this.stats.print();
+    }
     
     public Board(int board_size_x, int board_size_y) {
         this.board_size_x = board_size_x;
         this.board_size_y = board_size_y;
 
+        this.robs = new ArrayList<Rob>();
+        this.offspring = new ArrayList<Rob>();
         fields = new Field[board_size_x * board_size_y];
+        this.stats = new Stats();
     }
     
 }

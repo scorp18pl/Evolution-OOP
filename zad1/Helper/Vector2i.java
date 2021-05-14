@@ -8,9 +8,16 @@ public class Vector2i {
         return new Vector2i(0, 0);
     }
 
-    public Vector2i(Vector2i w) {
-        this.x = w.x;
-        this.y = w.y;
+    public String toString() {
+        return "<" + this.x + ", " + this.y + ">";
+    }
+
+    public Vector2i(Vector2i v) {
+        if (v == null)
+            System.out.println("null v");
+
+        this.x = v.x;
+        this.y = v.y;
     }
 
     public Vector2i(int x, int y) {

@@ -9,6 +9,10 @@ public class Field {
         return false;
     }
 
+    public boolean isRegenerating() {
+        return false;
+    }
+
     public void removeFood() {
     }
 

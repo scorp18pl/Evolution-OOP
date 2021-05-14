@@ -68,7 +68,7 @@ public class Input {
         return f;
     }
 
-    private static Program convertToProgram(String value) {
+    private static Program convertToProgram(String value) throws Exception {
         return new Program(value);
     }
 

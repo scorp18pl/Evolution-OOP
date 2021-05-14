@@ -26,10 +26,16 @@ public class Evolution {
     public void start() {
         addRobs();
 
+        this.board.printState();
         for (int i = 0; i < Evolution.parameters.round_count; i++) {
             this.board.updateFields();
             this.board.updateRobs();
+            if(i % Evolution.getParameters().print_period == 0)
+                this.board.printState();
+
+            this.board.printStats();
         }
+        this.board.printState();
     }
 
     public Evolution(String[] args) throws Exception {
