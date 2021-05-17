@@ -3,6 +3,7 @@ package zad1.Rob;
 
 import java.util.Random;
 
+import zad1.Helper.Colors;
 import zad1.Board.Board;
 import zad1.Evolution.Evolution;
 import zad1.Helper.Vector2i;
@@ -11,8 +12,11 @@ import zad1.Program.Program;
 public class Rob {
     private Vector2i position;
 
+    private int offspring;
+    private int index;
     private int age;
     private int energy;
+    private StatColors stat_colors;
     private Program program;
 
     private Board.Direction direction;
@@ -32,9 +36,17 @@ public class Rob {
     public void setDirection(Board.Direction direction) {
         this.direction = direction;
     }
+    
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public void incrementAge() {
         this.age++;
+    }
+
+    public void colorUpdate() {
+        this.stat_colors.update(this);
     }
 
     private boolean canEat(Board board) {
@@ -54,6 +66,10 @@ public class Rob {
         return this.energy;
     }
 
+    public int getOffspring() {
+        return this.offspring;
+    }
+
     public int getProgramLength() {
         return this.program.getLength();
     }
@@ -71,12 +87,34 @@ public class Rob {
         }
     }
 
-    public void print() {
-        System.out.println("Rob:");
+    public void printDir(boolean color) {
+        if (color) System.out.print(this.stat_colors.getEnergyColor());
 
-        System.out.println("położenie: " + this.position.toString() + ", kierunek: " + this.dirToString() + 
-                            ", wiek: " + this.age + ", energia: " + this.energy);
-        this.program.print();
+        switch (this.direction) {
+            case E:
+                System.out.print(">");
+                break;
+            case N:
+                System.out.print("^");
+                break;
+            case S:
+                System.out.print("v");
+                break;
+            default:
+                System.out.print("<");
+                break;
+
+        }
+    }
+
+    public void print(boolean color) {
+        System.out.println((color ? Colors.YELLOW : "") + " Rob " + (color ? Colors.WHITE : "") + this.index + ": ");
+        System.out.println((color ? Colors.WHITE_BOLD : "") + "  Położenie: " + (color ? Colors.WHITE : "") + this.position.toString());
+        System.out.println((color ? Colors.WHITE_BOLD : "") + "  Kierunek: " + (color ? Colors.WHITE : "") + this.dirToString());
+        System.out.println((color ? Colors.WHITE_BOLD : "") + "  Wiek: " + (color ? this.stat_colors.getAgeColor() : "") + this.age);
+        System.out.println((color ? Colors.WHITE_BOLD : "") + "  Energia: " + (color ? this.stat_colors.getEnergyColor() : "") + this.energy);
+        System.out.println((color ? Colors.WHITE_BOLD : "") + "  Program: " + (color ? Colors.WHITE : "") + this.program.toString());
+        System.out.println((color ? Colors.WHITE_BOLD : "") + "  Potomstwo: " + (color ? this.stat_colors.getOffspringColor() : "") + this.offspring);
     }
 
     private void turn(boolean left) {
@@ -174,6 +212,7 @@ public class Rob {
     }
 
     public Rob duplicate() {
+        offspring++;
         Program program = this.program.mutate();
         int energy = (int)((float)this.energy * Evolution.getParameters().parent_energy_fraction);
         this.energy -= energy;
@@ -188,7 +227,10 @@ public class Rob {
     public Rob(Program program, int energy) {
         this.program = program;
         this.energy = energy;
+        this.stat_colors = new StatColors(Colors.WHITE);
         this.direction = Board.Direction.N;
+        this.index = 0;
         this.age = 0;
+        this.offspring = 0;
     }
 }

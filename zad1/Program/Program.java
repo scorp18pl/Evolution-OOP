@@ -80,11 +80,11 @@ public class Program {
         }
     }
 
-    public void print() {
-        System.out.println("Program: ");
-        for (int i = 0; i < this.instructions.size(); i++) {
-            System.out.println(i + " : " + instrToString(this.instructions.get(i)));
-        }
+    public String toString() {
+        String string = "";
+        for (int i = 0; i < this.instructions.size(); i++)
+            string = string.concat(instrToString(this.instructions.get(i)) + " ");
+        return string;
     }
 
     public Instruction getRandomInstruction() {
@@ -108,9 +108,9 @@ public class Program {
     private void changeInstruction() {
         Random r = new Random();
         Instruction i = Evolution.getParameters().instr_log.getRandomInstruction();
-        if (this.instructions == null) {
-            System.out.println("null instr");
-        }
+        if (this.instructions == null || this.instructions.size() <= 0)
+            return;
+
         this.instructions.set(r.nextInt(this.instructions.size()), i);
     }
 
@@ -132,7 +132,7 @@ public class Program {
         if (this.instructions.size() > 0 && Program.drawInstrAddition())
             p.addInstruction();
 
-        if (Program.drawInstrChange())
+        if (this.instructions.size() > 0 && Program.drawInstrChange())
             p.changeInstruction();
             
         return p;

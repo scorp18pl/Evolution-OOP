@@ -1,12 +1,12 @@
-ile_tur 100
-pocz_ile_robów 5
+ile_tur 1000
+pocz_ile_robów 10
 pocz_progr lpiwj
-pocz_energia 200
+pocz_energia 10
 ile_daje_jedzenie 10
-ile_rośnie_jedzenie 2
+ile_rośnie_jedzenie 5
 koszt_tury 1
 pr_powielenia 0.2
-ułamek_energii_rodzica 0.8
+ułamek_energii_rodzica 0.4
 limit_powielenia 12
 pr_usunięcia_instr 0.1
 pr_dodania_instr 0.3

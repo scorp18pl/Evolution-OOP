@@ -38,10 +38,11 @@ public class Evolution {
         this.board.printState();
     }
 
-    public Evolution(String[] args) throws Exception {
+    public Evolution(String[] args, boolean color) throws Exception {
         Input.checkArguments(args);
 
         this.board = Input.scanBoard(args);
         Evolution.parameters = Input.scanParameters(args);
+        Evolution.parameters.color = color;
     }
 }

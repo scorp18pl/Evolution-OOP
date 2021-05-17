@@ -5,7 +5,7 @@ public class ValueI {
     public float mean;
 
     public String toString() {
-        return this.min + "/" + String.format("%.02f", mean) + "/" + this.max;
+        return (this.min + "/" + String.format("%.02f", mean) + "/" + this.max).replace(',', '.');
     }
 
     public ValueI(int min, float mean, int max) {

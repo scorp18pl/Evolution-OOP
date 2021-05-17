@@ -2,6 +2,7 @@ package zad1.Board;
 
 import java.util.ArrayList;
 
+import zad1.Helper.Colors;
 import zad1.Helper.ValueI;
 import zad1.Rob.Rob;
 
@@ -22,7 +23,7 @@ public class Stats {
             
             length++;
         }
-        v.mean = v.mean / length;
+        v.mean = length == 0.f ? 0.f : v.mean / length;
 
         return v;
     }
@@ -40,7 +41,7 @@ public class Stats {
             
             length++;
         }
-        v.mean = v.mean / length;
+        v.mean = length == 0.f ? 0.f : v.mean / length;
 
         return v;
     }
@@ -77,10 +78,26 @@ public class Stats {
         this.updateRobStats(b.getRobs());
     }
 
-    public void print() {
-        System.out.println(this.round + ", rob: " + this.rob_count + ", żyw: " + 
-                            this.food_field_count + ", prg: " + this.rob_program_length.toString() + 
-                            ", energ: " + this.rob_energy.toString() + ", wiek: " + this.rob_age.toString());
+    public void print(boolean color) {
+        System.out.print((color ? Colors.WHITE_BOLD : "") + "Tura: " + 
+                        (color ? Colors.WHITE_BOLD : "") + this.round + ", ");
+
+        System.out.print((color ? Colors.WHITE_BOLD : "") + "Roby: " + 
+                        (color ? Colors.WHITE_BOLD : "") + this.rob_count + ", ");
+
+        System.out.print((color ? Colors.WHITE_BOLD : "") + "Żywność: " + 
+                        (color ? Colors.WHITE_BOLD : "") + this.food_field_count + ", ");
+
+        System.out.print((color ? Colors.WHITE_BOLD : "") + "Program: " + 
+                        (color ? Colors.WHITE_BOLD : "") + this.rob_program_length.toString() + ", ");
+
+        System.out.print((color ? Colors.WHITE_BOLD : "") + "Energia: " + 
+                        (color ? Colors.WHITE_BOLD : "") + this.rob_energy.toString() + ", ");
+
+        System.out.print((color ? Colors.WHITE_BOLD : "") + "Wiek: " + 
+                        (color ? Colors.WHITE_BOLD : "") + this.rob_age.toString() + ", ");
+                        
+        System.out.print("\n");
     }
 
     public Stats() {
