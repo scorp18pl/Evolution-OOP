@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-import zad1.Helper.Colors;
 import zad1.Helper.Vector2i;
 import zad1.Rob.Rob;
 import zad1.Evolution.Evolution;
@@ -135,7 +134,6 @@ public class Board {
         for (Rob rob : this.robs) {
             rob.executeProgram(this);
             rob.incrementAge();
-            if (Evolution.getParameters().color) rob.colorUpdate();
             rob.setIndex(this.robs.indexOf(rob));
 
             if (rob.shouldDuplicate())
@@ -152,15 +150,15 @@ public class Board {
         }
     }
 
-    private void printRobs(boolean color) {
+    private void printRobs() {
         System.out.println("");
-        System.out.println((color ? Colors.RED_BOLD : "") + "Roby: " + (color ? Colors.WHITE : ""));
+        System.out.println("Roby: ");
 
         for(Rob rob : this.robs)
-            rob.print(color);
+            rob.print();
     }
 
-    private void printBoard(boolean color) {
+    private void printBoard() {
         ArrayList<Rob> sortedRobs = new ArrayList<Rob>();
         sortedRobs.addAll(this.robs);
 
@@ -174,7 +172,7 @@ public class Board {
             }
         });
 
-        System.out.println((color ? Colors.RED_BOLD : "") + "Plansza: " + (color ? Colors.WHITE : ""));
+        System.out.println("Plansza: ");
         for (int i = -1; i < this.board_size_x + 1; i++)
             System.out.print("#");
         System.out.print("\n");
@@ -185,17 +183,16 @@ public class Board {
                 System.out.print("#");
 
             if (rob_i < sortedRobs.size() && getFieldIndex(sortedRobs.get(rob_i).getPosition()) == i) {
-                sortedRobs.get(rob_i).printDir(color);
+                sortedRobs.get(rob_i).printDir();
                 while (rob_i < sortedRobs.size() && getFieldIndex(sortedRobs.get(rob_i).getPosition()) == i)
                     rob_i++;
             }
             else if (this.fields[i].hasFood())
-                System.out.print((color ? Colors.PURPLE : "") + "*");
+                System.out.print("*");
             else if (this.fields[i].isRegenerating())
-                System.out.print((color ? Colors.BLUE : "") + "`");
+                System.out.print("`");
             else
                 System.out.print(" ");
-            System.out.print(color ? Colors.WHITE : "");
 
             if ((i + 1) % this.board_size_x == 0)
                 System.out.print("#\n");
@@ -205,21 +202,14 @@ public class Board {
             System.out.print("#");
         System.out.print("\n");
         
-        System.out.println((color ? Colors.WHITE_BOLD : "") + "LEGENDA: ");
-        System.out.println((color ? Colors.PURPLE : "") + "* - pole posiadające dostępne pożywienie.");
-        System.out.println((color ? Colors.BLUE : "") + "` - pole posiadające aktualnie niedostępne, regenerujące się jedzenie.");
-        if (color) System.out.print(Colors.WHITE);
-        System.out.println((color ? Colors.WHITE_BOLD : "") + "roby: " + (color ? Colors.WHITE : ""));
+        System.out.println("LEGENDA: ");
+        System.out.println("* - pole posiadające dostępne pożywienie.");
+        System.out.println("` - pole posiadające aktualnie niedostępne, regenerujące się jedzenie.");
+        System.out.println("roby: ");
         System.out.println(" < - rob kierujący się na zachód.");
         System.out.println(" > - rob kierujący się na wschód.");
         System.out.println(" ^ - rob kierujący się na północ.");
         System.out.println(" v - rob kierujący się na południe.");
-
-        if (color) {
-            System.out.println("Rob posiada" + Colors.RED + " niski," + Colors.YELLOW + " neutralny," + Colors.GREEN + 
-                                " wysoki" + Colors.WHITE + " poziom energii.");
-            System.out.print(Colors.WHITE);
-        }
     }
 
     public void updateRobs() {
@@ -234,16 +224,15 @@ public class Board {
     }
 
     public void printState() {
-        boolean color = Evolution.getParameters().color;
-        System.out.println((color ? Colors.PURPLE_BOLD_BRIGHT : "") + "Aktualny stan symulacji: " + (color ? Colors.WHITE : ""));
-        printBoard(color);
-        printRobs(color);
+        System.out.println("Aktualny stan symulacji: ");
+        printBoard();
+        printRobs();
         System.out.println(" ");
     }
 
     public void printStats() {
         this.stats.update(this);
-        this.stats.print(Evolution.getParameters().color);
+        this.stats.print();
     }
     
     public Board(int board_size_x, int board_size_y) {

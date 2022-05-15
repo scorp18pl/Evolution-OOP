@@ -2,7 +2,6 @@ package zad1.Board;
 
 import java.util.ArrayList;
 
-import zad1.Helper.Colors;
 import zad1.Helper.ValueI;
 import zad1.Rob.Rob;
 
@@ -78,24 +77,13 @@ public class Stats {
         this.updateRobStats(b.getRobs());
     }
 
-    public void print(boolean color) {
-        System.out.print((color ? Colors.WHITE_BOLD : "") + "Tura: " + 
-                        (color ? Colors.WHITE_BOLD : "") + this.round + ", ");
-
-        System.out.print((color ? Colors.WHITE_BOLD : "") + "Roby: " + 
-                        (color ? Colors.WHITE_BOLD : "") + this.rob_count + ", ");
-
-        System.out.print((color ? Colors.WHITE_BOLD : "") + "Żywność: " + 
-                        (color ? Colors.WHITE_BOLD : "") + this.food_field_count + ", ");
-
-        System.out.print((color ? Colors.WHITE_BOLD : "") + "Program: " + 
-                        (color ? Colors.WHITE_BOLD : "") + this.rob_program_length.toString() + ", ");
-
-        System.out.print((color ? Colors.WHITE_BOLD : "") + "Energia: " + 
-                        (color ? Colors.WHITE_BOLD : "") + this.rob_energy.toString() + ", ");
-
-        System.out.print((color ? Colors.WHITE_BOLD : "") + "Wiek: " + 
-                        (color ? Colors.WHITE_BOLD : "") + this.rob_age.toString() + ", ");
+    public void print() {
+        System.out.print("Tura: " + this.round + ", ");
+        System.out.print("Roby: " + this.rob_count + ", ");
+        System.out.print("Żywność: " + this.food_field_count + ", ");
+        System.out.print("Program: " + this.rob_program_length.toString() + ", ");
+        System.out.print("Energia: " + this.rob_energy.toString() + ", ");
+        System.out.print("Wiek: " + this.rob_age.toString() + ", ");
                         
         System.out.print("\n");
     }

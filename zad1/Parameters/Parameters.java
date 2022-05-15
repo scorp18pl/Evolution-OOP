@@ -17,7 +17,6 @@ public class Parameters {
     public int round_count;
     public int init_rob_count;
     public int print_period;
-    public boolean color;
 
     //Energia
     public int init_energy;
@@ -172,7 +171,6 @@ public class Parameters {
         this.round_count = p.round_count;
         this.init_rob_count = p.init_rob_count;
         this.print_period = p.print_period;
-        this.color = p.color;
 
         this.init_energy = p.init_energy;
         this.round_price = p.round_price;
